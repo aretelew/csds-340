@@ -1,0 +1,6 @@
+HGB lr.03 it500 L7 msl10 l2=1 mf.5       AUC 0.9199±0.0013  TPR@1% 0.496±0.016 (step 0.496)  pAUC.05 0.7959  fit 0.34s  (eval 7s)
+HGB lr.03 it500 L7 msl20 l2=1 mf.5       AUC 0.9194±0.0017  TPR@1% 0.507±0.031 (step 0.507)  pAUC.05 0.7987  fit 0.33s  (eval 3s)
+HGB lr.03 it800 L4 msl10 l2=1 mf.5       AUC 0.9215±0.0017  TPR@1% 0.500±0.046 (step 0.500)  pAUC.05 0.7985  fit 0.44s  (eval 6s)
+HGB lr.015 it1000 L7 msl10 l2=1 mf.5     AUC 0.9198±0.0016  TPR@1% 0.502±0.023 (step 0.502)  pAUC.05 0.7959  fit 0.60s  (eval 7s)
+HGB L7 mf.5 mean-impute                  AUC 0.9183±0.0020  TPR@1% 0.484±0.014 (step 0.484)  pAUC.05 0.7915  fit 0.26s  (eval 2s)
+HGB L7 mf.5 zero-impute                  AUC 0.9189±0.0021  TPR@1% 0.397±0.027 (step 0.397)  pAUC.05 0.7677  fit 0.27s  (eval 2s)

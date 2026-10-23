@@ -1,0 +1,3 @@
+RankAvg HGB+ETnan                        AUC 0.9197±0.0006  TPR@1% 0.567±0.013 (step 0.567)  pAUC.05 0.8099  fit 1.77s  (eval 15s)
+RankAvg HGB+ETmean3                      AUC 0.9242±0.0011  TPR@1% 0.524±0.029 (step 0.524)  pAUC.05 0.8071  fit 1.41s  (eval 9s)
+RankAvg HGB+LGBM+ETnan                   AUC 0.9211±0.0007  TPR@1% 0.561±0.030 (step 0.561)  pAUC.05 0.8094  fit 1.99s  (eval 13s)

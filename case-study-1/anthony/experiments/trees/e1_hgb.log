@@ -1,0 +1,8 @@
+HGB default (lr.1 it100 L31 msl20)       AUC 0.9148±0.0013  TPR@1% 0.459±0.036 (step 0.459)  pAUC.05 0.7796  fit 0.17s  (eval 6s)
+HGB lr.05 it300 L15 msl20 l2=1           AUC 0.9158±0.0015  TPR@1% 0.494±0.025 (step 0.494)  pAUC.05 0.7862  fit 0.29s  (eval 2s)
+HGB lr.03 it500 L15 msl20 l2=1           AUC 0.9150±0.0018  TPR@1% 0.500±0.021 (step 0.500)  pAUC.05 0.7866  fit 0.49s  (eval 4s)
+HGB lr.03 it500 L7 msl10 l2=1            AUC 0.9186±0.0021  TPR@1% 0.505±0.032 (step 0.505)  pAUC.05 0.7922  fit 0.31s  (eval 2s)
+HGB lr.03 it500 L15 msl40 l2=1           AUC 0.9110±0.0014  TPR@1% 0.468±0.030 (step 0.468)  pAUC.05 0.7852  fit 0.81s  (eval 5s)
+HGB lr.03 it500 L15 msl20 l2=1 mf.5      AUC 0.9171±0.0012  TPR@1% 0.515±0.016 (step 0.515)  pAUC.05 0.7933  fit 0.46s  (eval 6s)
+HGB lr.03 it2000 L15 earlystop           AUC 0.9128±0.0021  TPR@1% 0.472±0.044 (step 0.472)  pAUC.05 0.7831  fit 1.34s  (eval 9s)
+HGB lr.03 it500 L15 median-impute        AUC 0.9115±0.0023  TPR@1% 0.421±0.024 (step 0.421)  pAUC.05 0.7546  fit 0.71s  (eval 7s)

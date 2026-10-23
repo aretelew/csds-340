@@ -1,0 +1,7 @@
+OOF-rank screen (pooled OOF ranks averaged, mean over 5 repeats):
+  HGB+ETnan              AUC 0.9187±0.0014  TPR@1% 0.572±0.009
+  HGB+ETmean3            AUC 0.9232±0.0017  TPR@1% 0.492±0.012
+  HGB+XGB+ETnan          AUC 0.9194±0.0011  TPR@1% 0.567±0.017
+  HGB+LGBM+ETnan         AUC 0.9200±0.0015  TPR@1% 0.564±0.026
+  HGB+XGB+LGBM           AUC 0.9200±0.0015  TPR@1% 0.527±0.032
+  HGB+ETnan+ETmean3      AUC 0.9194±0.0015  TPR@1% 0.535±0.017

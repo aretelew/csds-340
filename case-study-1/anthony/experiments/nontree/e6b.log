@@ -1,0 +1,44 @@
+MLP(16,) lbfgs alpha60.0 | log1e4        AUC 0.9216±0.0008  TPR@1% 0.518±0.018 (step 0.518)  pAUC.05 0.8046 [12.1s]
+MLP(16,) lbfgs alpha100.0 | log1e4       AUC 0.9211±0.0008  TPR@1% 0.513±0.020 (step 0.513)  pAUC.05 0.8046 [0.7s]
+MLP(64,) lbfgs alpha100.0 | log1e4       AUC 0.9211±0.0008  TPR@1% 0.513±0.020 (step 0.513)  pAUC.05 0.8045 [0.6s]
+MLP(16,) alpha30 x5-seed bag | log1e4    AUC 0.9231±0.0009  TPR@1% 0.558±0.026 (step 0.558)  pAUC.05 0.8098 [9.2s]
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-aretelew-Developer-csds-340/39cafc5a-5284-4393-84f2-4fab8d74f2fb/scratchpad/nontree/e6b_gpc_mlp.py", line 49, in <module>
+    run(make_pipeline(F(), StandardScaler(),
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      GPCScore(GaussianProcessClassifier(ConstantKernel(1.0) * RBF(length_scale=10.0), random_state=0))),
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        "GPC C*RBF (ML-II) | log1e4", "GPC")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/claude-501/-Users-aretelew-Developer-csds-340/39cafc5a-5284-4393-84f2-4fab8d74f2fb/scratchpad/nontree/ntcommon.py", line 201, in run
+    r = evaluate(model, X, y, name=name, return_oof=oof)
+  File "/private/tmp/claude-501/-Users-aretelew-Developer-csds-340/39cafc5a-5284-4393-84f2-4fab8d74f2fb/scratchpad/harness.py", line 78, in evaluate
+    aucs.append(roc_auc_score(y, s))
+                ~~~~~~~~~~~~~^^^^^^
+  File "/Users/aretelew/.cache/uv/archive-v0/sI6Dc7gi1-2maS9F/lib/python3.14/site-packages/sklearn/utils/_param_validation.py", line 218, in wrapper
+    return func(*args, **kwargs)
+  File "/Users/aretelew/.cache/uv/archive-v0/sI6Dc7gi1-2maS9F/lib/python3.14/site-packages/sklearn/metrics/_ranking.py", line 710, in roc_auc_score
+    y_score = check_array(y_score, ensure_2d=False)
+  File "/Users/aretelew/.cache/uv/archive-v0/sI6Dc7gi1-2maS9F/lib/python3.14/site-packages/sklearn/utils/validation.py", line 1090, in check_array
+    _assert_all_finite(
+    ~~~~~~~~~~~~~~~~~~^
+        array,
+        ^^^^^^
+    ...<2 lines>...
+        allow_nan=ensure_all_finite == "allow-nan",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/aretelew/.cache/uv/archive-v0/sI6Dc7gi1-2maS9F/lib/python3.14/site-packages/sklearn/utils/validation.py", line 137, in _assert_all_finite
+    _assert_all_finite_element_wise(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        X,
+        ^^
+    ...<4 lines>...
+        input_name=input_name,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/aretelew/.cache/uv/archive-v0/sI6Dc7gi1-2maS9F/lib/python3.14/site-packages/sklearn/utils/validation.py", line 186, in _assert_all_finite_element_wise
+    raise ValueError(msg_err)
+ValueError: Input contains NaN.

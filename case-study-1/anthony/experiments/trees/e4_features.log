@@ -1,0 +1,7 @@
+HGB L4 mf.5 +raw stats                   AUC 0.9197±0.0021  TPR@1% 0.482±0.026 (step 0.482)  pAUC.05 0.7951  fit 0.96s  (eval 19s)
+HGB L4 mf.5 +norm stats                  AUC 0.9197±0.0014  TPR@1% 0.493±0.017 (step 0.493)  pAUC.05 0.7925  fit 0.62s  (eval 8s)
+ET NaN +raw stats                        AUC 0.9023±0.0015  TPR@1% 0.539±0.009 (step 0.539)  pAUC.05 0.7978  fit 1.43s  (eval 13s)
+ET NaN +norm stats                       AUC 0.9020±0.0011  TPR@1% 0.534±0.013 (step 0.534)  pAUC.05 0.7972  fit 1.42s  (eval 9s)
+ET mean +indicators                      AUC 0.8988±0.0017  TPR@1% 0.409±0.032 (step 0.408)  pAUC.05 0.7680  fit 1.42s  (eval 9s)
+ET mean +norm stats                      AUC 0.9106±0.0015  TPR@1% 0.509±0.009 (step 0.507)  pAUC.05 0.7943  fit 1.18s  (eval 8s)
+RF NaN +norm stats                       AUC 0.9097±0.0012  TPR@1% 0.497±0.012 (step 0.496)  pAUC.05 0.7940  fit 1.65s  (eval 14s)

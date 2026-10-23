@@ -1,0 +1,8 @@
+single-model bootstrap SE (REF): AUC SE 0.0073, TPR@1% SE 0.067
+HGB lr.03 it800 L4 msl10 l2=1 mf.5     - HGB default (lr.1 it100  dAUC +0.0067 (SE 0.0025, 95% [+0.0021,+0.0113])  dTPR1 +0.056 (SE 0.043, [-0.028,+0.146])
+LGBM L4 lr.03 n800 mcs10 ss.8 cs.5     - HGB lr.03 it800 L4 msl10 dAUC -0.0024 (SE 0.0012, 95% [-0.0049,-0.0002])  dTPR1 +0.007 (SE 0.018, [-0.028,+0.042])
+XGB d3 lr.03 n600 ss.8 cs.8            - HGB lr.03 it800 L4 msl10 dAUC -0.0042 (SE 0.0013, 95% [-0.0069,-0.0019])  dTPR1 +0.016 (SE 0.023, [-0.027,+0.058])
+ET 1000 sqrt msl1 NaN                  - HGB lr.03 it800 L4 msl10 dAUC -0.0147 (SE 0.0040, 95% [-0.0223,-0.0074])  dTPR1 +0.027 (SE 0.052, [-0.065,+0.128])
+RankAvg HGB+ETmean3                    - HGB lr.03 it800 L4 msl10 dAUC +0.0025 (SE 0.0019, 95% [-0.0008,+0.0064])  dTPR1 +0.009 (SE 0.043, [-0.080,+0.088])
+RankAvg HGB+ETnan                      - HGB lr.03 it800 L4 msl10 dAUC -0.0018 (SE 0.0020, 95% [-0.0058,+0.0021])  dTPR1 +0.051 (SE 0.037, [-0.009,+0.126])
+RankAvg HGB+LGBM+ETnan                 - HGB lr.03 it800 L4 msl10 dAUC -0.0004 (SE 0.0016, 95% [-0.0034,+0.0026])  dTPR1 +0.045 (SE 0.032, [-0.004,+0.116])

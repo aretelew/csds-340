@@ -1,0 +1,6 @@
+ET 500 sqrt msl1 NaN                     AUC 0.9069±0.0017  TPR@1% 0.524±0.023 (step 0.524)  pAUC.05 0.7993  fit 1.43s  (eval 25s)
+ET 2000 sqrt msl1 NaN                    AUC 0.9071±0.0011  TPR@1% 0.537±0.021 (step 0.537)  pAUC.05 0.8016  fit 5.87s  (eval 47s)
+ET 2000 sqrt msl1 mean                   AUC 0.9135±0.0017  TPR@1% 0.487±0.011 (step 0.486)  pAUC.05 0.7908  fit 4.51s  (eval 51s)
+ET 1000 mf3 msl1 NaN                     AUC 0.9065±0.0016  TPR@1% 0.529±0.016 (step 0.529)  pAUC.05 0.7977  fit 2.86s  (eval 24s)
+ET 1000 mf3 msl1 mean                    AUC 0.9157±0.0018  TPR@1% 0.510±0.024 (step 0.509)  pAUC.05 0.7905  fit 2.08s  (eval 25s)
+RF 2000 sqrt msl3 NaN                    AUC 0.9084±0.0012  TPR@1% 0.476±0.008 (step 0.476)  pAUC.05 0.7895  fit 6.31s  (eval 40s)

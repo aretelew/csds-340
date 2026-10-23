@@ -1,0 +1,2 @@
+ProbAvg HGB+ETnan                        AUC 0.9181±0.0013  TPR@1% 0.573±0.003 (step 0.573)  pAUC.05 0.8092  fit 1.78s  (eval 17s)
+ProbAvg HGB+ETmean3                      AUC 0.9229±0.0015  TPR@1% 0.508±0.029 (step 0.508)  pAUC.05 0.8068  fit 1.42s  (eval 9s)

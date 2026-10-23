@@ -1,0 +1,5 @@
+LR spline k4d3 C0.003 | log1e4           AUC 0.9227±0.0014  TPR@1% 0.541±0.024 (step 0.541)  pAUC.05 0.7999 [14.2s]
+LR spline k4d3 C0.01 | log1e4            AUC 0.9238±0.0017  TPR@1% 0.486±0.029 (step 0.486)  pAUC.05 0.7985 [0.5s]
+LR spline k3d2 C0.003 | log1e4           AUC 0.9238±0.0010  TPR@1% 0.494±0.017 (step 0.494)  pAUC.05 0.8012 [0.3s]
+LR spline k3d2 C0.01 | log1e4            AUC 0.9247±0.0011  TPR@1% 0.488±0.008 (step 0.488)  pAUC.05 0.8027 [0.5s]
+LR poly2 L2 C0.0003 | log1e4             AUC 0.9071±0.0026  TPR@1% 0.390±0.009 (step 0.390)  pAUC.05 0.7661 [0.5s]

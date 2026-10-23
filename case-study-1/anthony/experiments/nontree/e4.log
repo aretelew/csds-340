@@ -1,0 +1,52 @@
+GNB proba | id mean                      AUC 0.8213±0.0033  TPR@1% 0.115±0.012 (step 0.000)  pAUC.05 0.6175 [10.3s]
+GNB logodds | id mean                    AUC 0.8216±0.0031  TPR@1% 0.153±0.017 (step 0.153)  pAUC.05 0.6205 [0.3s]
+GNB logodds | log100                     AUC 0.8715±0.0014  TPR@1% 0.243±0.029 (step 0.243)  pAUC.05 0.6668 [9.4s]
+GNB logodds | log10000                   AUC 0.9025±0.0010  TPR@1% 0.269±0.010 (step 0.269)  pAUC.05 0.7153 [0.1s]
+GNB logodds | quantile                   AUC 0.9007±0.0011  TPR@1% 0.319±0.015 (step 0.319)  pAUC.05 0.7182 [0.3s]
+BernoulliNB a1 | pres zero-imputed       AUC 0.9073±0.0019  TPR@1% 0.327±0.007 (step 0.327)  pAUC.05 0.7374 [0.1s]
+BernoulliNB a1 | pres mean-imputed       AUC 0.9073±0.0007  TPR@1% 0.379±0.011 (step 0.379)  pAUC.05 0.7427 [0.1s]
+MultinomialNB a0.1 | 1000x zero-imp      AUC 0.8735±0.0019  TPR@1% 0.192±0.007 (step 0.192)  pAUC.05 0.6676 [0.1s]
+ComplementNB a0.1 | 1000x zero-imp       AUC 0.8735±0.0019  TPR@1% 0.192±0.007 (step 0.192)  pAUC.05 0.6676 [0.1s]
+MultinomialNB a1.0 | 1000x zero-imp      AUC 0.8735±0.0019  TPR@1% 0.191±0.006 (step 0.191)  pAUC.05 0.6675 [0.1s]
+ComplementNB a1.0 | 1000x zero-imp       AUC 0.8735±0.0019  TPR@1% 0.191±0.006 (step 0.191)  pAUC.05 0.6675 [0.1s]
+MultinomialNB a0.1 | 1000x mean-imp      AUC 0.8678±0.0017  TPR@1% 0.167±0.006 (step 0.167)  pAUC.05 0.6566 [0.1s]
+ComplementNB a0.1 | 1000x mean-imp       AUC 0.8678±0.0017  TPR@1% 0.167±0.006 (step 0.167)  pAUC.05 0.6566 [0.1s]
+MultinomialNB a1.0 | 1000x mean-imp      AUC 0.8678±0.0017  TPR@1% 0.167±0.006 (step 0.167)  pAUC.05 0.6565 [0.1s]
+ComplementNB a1.0 | 1000x mean-imp       AUC 0.8678±0.0017  TPR@1% 0.167±0.006 (step 0.167)  pAUC.05 0.6565 [0.1s]
+Bernoulli NB missing-marginalised        AUC 0.9106±0.0006  TPR@1% 0.370±0.010 (step 0.370)  pAUC.05 0.7502 [0.1s]
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-aretelew-Developer-csds-340/39cafc5a-5284-4393-84f2-4fab8d74f2fb/scratchpad/nontree/e4_naive_bayes.py", line 30, in <module>
+    run(ZInfNB(var_smooth=vs), f"ZeroInfl-LogNormal NB vs{vs} (marginalised)", "NB")
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/claude-501/-Users-aretelew-Developer-csds-340/39cafc5a-5284-4393-84f2-4fab8d74f2fb/scratchpad/nontree/ntcommon.py", line 197, in run
+    r = evaluate(model, X, y, name=name, return_oof=oof)
+  File "/private/tmp/claude-501/-Users-aretelew-Developer-csds-340/39cafc5a-5284-4393-84f2-4fab8d74f2fb/scratchpad/harness.py", line 78, in evaluate
+    aucs.append(roc_auc_score(y, s))
+                ~~~~~~~~~~~~~^^^^^^
+  File "/Users/aretelew/.cache/uv/archive-v0/sI6Dc7gi1-2maS9F/lib/python3.14/site-packages/sklearn/utils/_param_validation.py", line 218, in wrapper
+    return func(*args, **kwargs)
+  File "/Users/aretelew/.cache/uv/archive-v0/sI6Dc7gi1-2maS9F/lib/python3.14/site-packages/sklearn/metrics/_ranking.py", line 710, in roc_auc_score
+    y_score = check_array(y_score, ensure_2d=False)
+  File "/Users/aretelew/.cache/uv/archive-v0/sI6Dc7gi1-2maS9F/lib/python3.14/site-packages/sklearn/utils/validation.py", line 1090, in check_array
+    _assert_all_finite(
+    ~~~~~~~~~~~~~~~~~~^
+        array,
+        ^^^^^^
+    ...<2 lines>...
+        allow_nan=ensure_all_finite == "allow-nan",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/aretelew/.cache/uv/archive-v0/sI6Dc7gi1-2maS9F/lib/python3.14/site-packages/sklearn/utils/validation.py", line 137, in _assert_all_finite
+    _assert_all_finite_element_wise(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        X,
+        ^^
+    ...<4 lines>...
+        input_name=input_name,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/aretelew/.cache/uv/archive-v0/sI6Dc7gi1-2maS9F/lib/python3.14/site-packages/sklearn/utils/validation.py", line 186, in _assert_all_finite_element_wise
+    raise ValueError(msg_err)
+ValueError: Input contains NaN.
