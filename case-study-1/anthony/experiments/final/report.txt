@@ -1,0 +1,79 @@
+pool: et_mean3, et_nan, hgb, hgb_bag5, lgbm, lr, mlp, mlp_bag5, spline_lr, svc
+
+== single models: raw pooled OOF (as harness.evaluate) vs percentile-mapped ==
+et_mean3                               AUC 0.9161±0.0015  TPR@1% 0.514±0.030  pAUC.05 0.7904
+  mapped                               AUC 0.9164±0.0014  TPR@1% 0.511±0.031  pAUC.05 0.7907
+et_nan                                 AUC 0.9076±0.0015  TPR@1% 0.534±0.013  pAUC.05 0.8005
+  mapped                               AUC 0.9078±0.0014  TPR@1% 0.533±0.011  pAUC.05 0.8006
+hgb                                    AUC 0.9214±0.0013  TPR@1% 0.498±0.033  pAUC.05 0.7991
+  mapped                               AUC 0.9218±0.0011  TPR@1% 0.510±0.036  pAUC.05 0.8002
+hgb_bag5                               AUC 0.9213±0.0013  TPR@1% 0.500±0.028  pAUC.05 0.7995
+  mapped                               AUC 0.9218±0.0011  TPR@1% 0.507±0.032  pAUC.05 0.8004
+lgbm                                   AUC 0.9189±0.0015  TPR@1% 0.517±0.022  pAUC.05 0.7988
+  mapped                               AUC 0.9193±0.0013  TPR@1% 0.516±0.021  pAUC.05 0.7994
+lr                                     AUC 0.9223±0.0008  TPR@1% 0.529±0.028  pAUC.05 0.8042
+  mapped                               AUC 0.9225±0.0007  TPR@1% 0.533±0.022  pAUC.05 0.8042
+mlp                                    AUC 0.9234±0.0010  TPR@1% 0.563±0.023  pAUC.05 0.8105
+  mapped                               AUC 0.9238±0.0009  TPR@1% 0.567±0.022  pAUC.05 0.8106
+mlp_bag5                               AUC 0.9236±0.0009  TPR@1% 0.562±0.023  pAUC.05 0.8111
+  mapped                               AUC 0.9240±0.0008  TPR@1% 0.564±0.023  pAUC.05 0.8114
+spline_lr                              AUC 0.9249±0.0008  TPR@1% 0.495±0.010  pAUC.05 0.8025
+  mapped                               AUC 0.9251±0.0007  TPR@1% 0.498±0.007  pAUC.05 0.8026
+svc                                    AUC 0.9186±0.0007  TPR@1% 0.534±0.019  pAUC.05 0.8040
+  mapped                               AUC 0.9187±0.0006  TPR@1% 0.539±0.022  pAUC.05 0.8044
+
+== 312 candidates; best AUC 0.9274; 194 within 0.003 -> ranked by TPR@1% ==
+lgbm+lr+mlp_bag5+spline_lr             AUC 0.9260±0.0007  TPR@1% 0.571±0.033  pAUC.05 0.8129
+lgbm+lr+mlp+spline_lr                  AUC 0.9259±0.0007  TPR@1% 0.571±0.034  pAUC.05 0.8128
+et_nan+lgbm+mlp_bag5+spline_lr         AUC 0.9246±0.0008  TPR@1% 0.570±0.014  pAUC.05 0.8148
+et_nan+lgbm+mlp+spline_lr              AUC 0.9245±0.0009  TPR@1% 0.569±0.014  pAUC.05 0.8146
+et_nan+hgb+mlp+spline_lr               AUC 0.9252±0.0008  TPR@1% 0.568±0.012  pAUC.05 0.8149
+et_nan+hgb_bag5+mlp_bag5+spline_lr     AUC 0.9252±0.0008  TPR@1% 0.568±0.012  pAUC.05 0.8150
+et_nan+hgb_bag5+mlp+spline_lr          AUC 0.9252±0.0008  TPR@1% 0.568±0.013  pAUC.05 0.8148
+et_nan+hgb+mlp_bag5+spline_lr          AUC 0.9252±0.0008  TPR@1% 0.567±0.012  pAUC.05 0.8150
+hgb_bag5+lr+mlp+spline_lr              AUC 0.9264±0.0007  TPR@1% 0.567±0.026  pAUC.05 0.8129
+hgb_bag5+lr+mlp_bag5+spline_lr         AUC 0.9264±0.0007  TPR@1% 0.567±0.027  pAUC.05 0.8131
+et_nan+hgb+lr+mlp_bag5                 AUC 0.9244±0.0008  TPR@1% 0.567±0.016  pAUC.05 0.8141
+hgb+lr+mlp_bag5+spline_lr              AUC 0.9264±0.0007  TPR@1% 0.566±0.027  pAUC.05 0.8130
+et_nan+hgb_bag5+lr+spline_lr           AUC 0.9248±0.0008  TPR@1% 0.565±0.012  pAUC.05 0.8136
+hgb+lr+mlp+spline_lr                   AUC 0.9264±0.0007  TPR@1% 0.565±0.027  pAUC.05 0.8129
+et_nan+hgb+lr+spline_lr                AUC 0.9248±0.0007  TPR@1% 0.565±0.010  pAUC.05 0.8137
+et_nan+hgb_bag5+lr+mlp_bag5            AUC 0.9244±0.0008  TPR@1% 0.565±0.016  pAUC.05 0.8141
+lgbm+mlp_bag5                          AUC 0.9253±0.0009  TPR@1% 0.563±0.039  pAUC.05 0.8129
+lgbm+mlp                               AUC 0.9252±0.0009  TPR@1% 0.562±0.041  pAUC.05 0.8125
+lgbm+lr+mlp                            AUC 0.9251±0.0008  TPR@1% 0.561±0.031  pAUC.05 0.8116
+hgb_bag5+lgbm+mlp_bag5+spline_lr       AUC 0.9263±0.0009  TPR@1% 0.561±0.033  pAUC.05 0.8125
+hgb_bag5+lgbm+mlp+spline_lr            AUC 0.9263±0.0009  TPR@1% 0.561±0.033  pAUC.05 0.8123
+lgbm+lr+mlp_bag5                       AUC 0.9251±0.0007  TPR@1% 0.560±0.033  pAUC.05 0.8118
+hgb+lgbm+mlp+spline_lr                 AUC 0.9263±0.0009  TPR@1% 0.560±0.033  pAUC.05 0.8123
+hgb+lgbm+mlp_bag5+spline_lr            AUC 0.9263±0.0009  TPR@1% 0.560±0.033  pAUC.05 0.8125
+lgbm+mlp_bag5+spline_lr                AUC 0.9264±0.0008  TPR@1% 0.559±0.029  pAUC.05 0.8126
+lgbm+mlp+spline_lr                     AUC 0.9263±0.0008  TPR@1% 0.559±0.029  pAUC.05 0.8124
+hgb_bag5+lgbm+lr+spline_lr             AUC 0.9259±0.0009  TPR@1% 0.558±0.033  pAUC.05 0.8112
+hgb+lgbm+lr+spline_lr                  AUC 0.9260±0.0008  TPR@1% 0.556±0.032  pAUC.05 0.8112
+hgb_bag5+mlp_bag5+spline_lr            AUC 0.9269±0.0008  TPR@1% 0.552±0.026  pAUC.05 0.8131
+hgb_bag5+mlp+spline_lr                 AUC 0.9269±0.0008  TPR@1% 0.552±0.027  pAUC.05 0.8129
+
+== paired compare (10 repeats): lgbm+lr+mlp_bag5+spline_lr vs ==
+  hgb                                    tpr  diff +0.0617  wins 9/10  BEATS
+  hgb                                    auc  diff +0.0041  wins 10/10  BEATS
+  mlp                                    tpr  diff +0.0047  wins 4/10  -
+  mlp                                    auc  diff +0.0022  wins 10/10  BEATS
+  lgbm+lr+mlp+spline_lr                  tpr  diff +0.0006  wins 6/10  BEATS
+  lgbm+lr+mlp+spline_lr                  auc  diff +0.0000  wins 6/10  BEATS
+  et_nan+lgbm+mlp_bag5+spline_lr         tpr  diff +0.0018  wins 6/10  BEATS
+  et_nan+lgbm+mlp_bag5+spline_lr         auc  diff +0.0014  wins 10/10  BEATS
+  et_nan+lgbm+mlp+spline_lr              tpr  diff +0.0021  wins 6/10  BEATS
+  et_nan+lgbm+mlp+spline_lr              auc  diff +0.0015  wins 10/10  BEATS
+  et_nan+hgb+mlp+spline_lr               tpr  diff +0.0032  wins 7/10  BEATS
+  et_nan+hgb+mlp+spline_lr               auc  diff +0.0008  wins 10/10  BEATS
+  et_nan+hgb_bag5+mlp_bag5+spline_lr     tpr  diff +0.0035  wins 7/10  BEATS
+  et_nan+hgb_bag5+mlp_bag5+spline_lr     auc  diff +0.0008  wins 10/10  BEATS
+
+== split-half selection check (select on half A, score on half B, 40 halves) ==
+  selected                                                   held-out AUC 0.9224  TPR@1% 0.534
+  hgb                                                        held-out AUC 0.9197  TPR@1% 0.516
+  mlp                                                        held-out AUC 0.9221  TPR@1% 0.555
+  et_mean3+et_nan+hgb+lgbm+lr+mlp+spline_lr+svc (all models, no selection) held-out AUC 0.9240  TPR@1% 0.546
+  lgbm+lr+mlp_bag5+spline_lr (picked on ALL data: biased)    held-out AUC 0.9242  TPR@1% 0.555
+  most picked: lgbm+lr+mlp_bag5 (4), lgbm+lr+mlp+svc (4), mlp_bag5+svc (2), lr+mlp_bag5+svc (2), lgbm+mlp_bag5+svc (2), et_nan+hgb_bag5+lr+mlp (2)
