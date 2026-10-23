@@ -85,3 +85,39 @@ Paired over the 10 repeats:
   diverse models".
 - Percentile mapping slightly *helps* pooled single-model metrics (it puts
   each fold on one scale). Seed bagging changes nothing measurable.
+
+## TabPFN v2 (local test only)
+
+Open v2 weights (`Prior-Labs/TabPFN-v2-clf`, not gated, no login), tabpfn
+9.2.0 + torch 2.14 CPU. These live in a separate venv, not in pyproject:
+
+```
+uv venv tabpfn-venv && VIRTUAL_ENV=tabpfn-venv uv pip install torch tabpfn "scikit-learn>=1.9,<1.10" \
+    --extra-index-url https://download.pytorch.org/whl/cpu --index-strategy unsafe-best-match
+tabpfn-venv/bin/python -m experiments.final.nested tabpfn --no-inner --jobs 1   # 46 min on 4 cores
+```
+
+Above 1000 training rows it refuses to run on CPU unless
+`ignore_pretraining_limits=True`. One fit+predict on 1350 rows takes ~28 s on
+4 cores. Results, outer CV only (no inner refs; computing them would take
+~4.5 h):
+
+| model | AUC | TPR@1%FPR |
+|---|---|---|
+| tabpfn, raw pooled | 0.9263 ± 0.0012 | 0.576 ± 0.014 |
+
+- **Best single model.** It beats the MLP (TPR +0.013, wins 7/10; AUC wins
+  10/10) and HGB (wins 10/10 on both).
+- **It does not beat the best ensemble.** For ensembles we used a shortcut:
+  each fold's percentile reference is the other 9 folds' outer scores, with
+  no inner fits. On known ensembles this lands within about 0.001 AUC and
+  0.005 TPR of the exact nested result. TabPFN alone, mapped this way, scores
+  AUC 0.9260 / TPR 0.570, against 0.9260 / 0.571 for
+  `lgbm+lr+mlp_bag5+spline_lr`. TabPFN wins 3/10 on TPR and 4/10 on AUC.
+- **Adding sklearn members doesn't help.** The best TabPFN ensembles reach
+  TPR ~0.575 at AUC 0.924 to 0.926.
+
+Every strong approach converges near AUC 0.926 and TPR 0.57. Deploying
+TabPFN would need torch and tabpfn on the grader's machine, an internet
+download of the weights, and about 1 min of CPU time. Since code that errors
+scores 0, that risk buys nothing measurable.
