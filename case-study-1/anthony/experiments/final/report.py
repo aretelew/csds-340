@@ -12,6 +12,7 @@ compare with fixed choices. Searching hundreds of combos on one dataset is
 optimistic; this shows how much of the gain survives.
 
     uv run python -m experiments.final.report > experiments/final/report.txt
+    ... --pool lr svc knn ... --vs lgbm+lr+mlp_bag5+spline_lr   (restricted pool)
 """
 from itertools import combinations
 
@@ -76,8 +77,10 @@ def split_half(cands, fixed, B=40, seed=0):
     return {k: np.array(v) for k, v in res.items()}, picks
 
 
-def main():
-    names = pool()
+def main(names=None, vs=()):
+    """names: the model pool (default: every cached model). vs: extra
+    ensembles ("a+b+c", any cached models) to compare the winner against."""
+    names = names or pool()
     print(f"pool: {', '.join(names)}\n")
 
     print("== single models: raw pooled OOF (as harness.evaluate) vs percentile-mapped ==")
@@ -99,8 +102,10 @@ def main():
         print(fmt(r))
 
     by = {r["name"]: r for r in rows}
+    by |= {v: E.combo(tuple(v.split("+"))) for v in vs}
     top = elig[0]
-    refs = [n for n in ["hgb", "hgb+et_nan", "mlp", "hgb+et_nan+mlp"] if n in by]
+    refs = list(vs) + [n for n in ["hgb", "hgb+et_nan", "mlp", "hgb+et_nan+mlp"]
+                       if n in by and n not in vs]
     refs += [r["name"] for r in elig[1:6]]
     print(f"\n== paired compare (10 repeats): {top['name']} vs ==")
     for n in refs:
@@ -129,4 +134,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--pool", nargs="+", help="models to combine (default: all cached)")
+    ap.add_argument("--vs", nargs="+", default=[], help='ensembles to compare against, e.g. "mlp+lr"')
+    a = ap.parse_args()
+    main(a.pool, a.vs)

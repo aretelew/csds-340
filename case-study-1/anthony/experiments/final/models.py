@@ -116,6 +116,44 @@ def svc():
     return make_pipeline(Feat("sqrt"), StandardScaler(), SVC(C=10.0, gamma=0.01))
 
 
+# In-class methods (CSDS 340 list), best config per family from
+# inclass_screen.py; all linear/distance models on log1p(1e4x) + standardize.
+def lin(est):
+    return make_pipeline(Feat("log"), StandardScaler(), est)
+
+
+def perceptron():
+    from sklearn.linear_model import SGDClassifier
+    return lin(SGDClassifier(loss="perceptron", penalty="l2", alpha=0.01, average=True,
+                             max_iter=2000, random_state=0))
+
+
+def adaline():
+    """Adaline's least-squares objective, solved in closed form (ridge)."""
+    from sklearn.linear_model import RidgeClassifier
+    return lin(RidgeClassifier(alpha=1000.0))
+
+
+def linsvc():
+    from sklearn.svm import LinearSVC
+    return lin(LinearSVC(C=0.01, max_iter=20000))
+
+
+def svc_log():
+    return lin(SVC(C=30.0, gamma=0.001))
+
+
+def knn():
+    from sklearn.neighbors import KNeighborsClassifier
+    return lin(KNeighborsClassifier(n_neighbors=151, weights="distance"))
+
+
+def tree():
+    from sklearn.tree import DecisionTreeClassifier
+    return make_pipeline(to_nan(), DecisionTreeClassifier(max_depth=8, min_samples_leaf=20,
+                                                          random_state=0))
+
+
 def tabpfn():
     """Open TabPFN v2 weights, CPU. Needs torch + tabpfn, which are not in
     pyproject (see final/README.md)."""
@@ -138,4 +176,10 @@ MODELS = {
     "lr": lr,
     "svc": svc,
     "tabpfn": tabpfn,
+    "perceptron": perceptron,
+    "adaline": adaline,
+    "linsvc": linsvc,
+    "svc_log": svc_log,
+    "knn": knn,
+    "tree": tree,
 }
