@@ -154,6 +154,22 @@ def tree():
                                                           random_state=0))
 
 
+def rf():
+    """max_features=1 (one random feature per split) beat sqrt and 2."""
+    from sklearn.ensemble import RandomForestClassifier
+    return make_pipeline(to_nan(), RandomForestClassifier(
+        n_estimators=1000, max_features=1, min_samples_leaf=1, random_state=0, n_jobs=1))
+
+
+def ada():
+    """AdaBoost on stumps. It rejects NaN, so trees see the raw -1 (all real
+    values are >= 0, so one split isolates missing)."""
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.tree import DecisionTreeClassifier
+    return AdaBoostClassifier(DecisionTreeClassifier(max_depth=1, random_state=0),
+                              n_estimators=500, learning_rate=0.5, random_state=0)
+
+
 def tabpfn():
     """Open TabPFN v2 weights, CPU. Needs torch + tabpfn, which are not in
     pyproject (see final/README.md)."""
@@ -182,4 +198,6 @@ MODELS = {
     "svc_log": svc_log,
     "knn": knn,
     "tree": tree,
+    "rf": rf,
+    "ada": ada,
 }
