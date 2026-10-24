@@ -121,3 +121,52 @@ Every strong approach converges near AUC 0.926 and TPR 0.57. Deploying
 TabPFN would need torch and tabpfn on the grader's machine, an internet
 download of the weights, and about 1 min of CPU time. Since code that errors
 scores 0, that risk buys nothing measurable.
+
+## Can the in-class methods match this?
+
+Yes. We screened the families from the course list that the earlier screens
+hadn't covered (`inclass_screen.py`, results in `inclass_screen.jsonl`):
+perceptron, adaline, linear SVM, kernel SVM, kNN, decision tree, random
+forest, bagging and AdaBoost. The best config per family was then
+nested-cached:
+
+| model (10 repeats, raw pooled) | AUC | TPR@1%FPR |
+|---|---|---|
+| svc_log (RBF, C=30, gamma=.001, log1p(1e4x)) | 0.9228 ± 0.0009 | 0.487 ± 0.015 |
+| linsvc (C=0.01) | 0.9217 ± 0.0007 | 0.519 ± 0.023 |
+| ada (AdaBoost, 500 stumps, lr .5, raw -1) | 0.9180 ± 0.0018 | 0.457 ± 0.029 |
+| adaline (least squares = ridge, alpha=1000) | 0.9175 ± 0.0007 | 0.522 ± 0.020 |
+| perceptron (averaged, L2 alpha=.01) | 0.9174 ± 0.0017 | 0.490 ± 0.024 |
+| rf (1000 trees, **max_features=1**, NaN) | 0.9167 ± 0.0014 | 0.541 ± 0.030 |
+| knn (k=151, distance) | 0.9044 ± 0.0011 | 0.493 ± 0.009 |
+| tree (depth 8, min leaf 20) | 0.8611 ± 0.0065 | 0.196 ± 0.020 |
+
+Notes from the screen:
+- **Random forest:** sqrt features gives 0.909 / 0.46; max_features 2 gives
+  0.9155 / 0.517; 1 is best. Plain bagged trees reach only 0.894 / 0.34–0.39.
+- **AdaBoost** rejects NaN, so it is fed the raw -1. Mean-imputing changes
+  little.
+
+Ensembles (reports: `report_inclass_strict.txt`, `report_inclass_ext.txt`):
+
+| ensemble | AUC | TPR@1%FPR |
+|---|---|---|
+| rf+lr+spline_lr+linsvc (best with spline LR) | 0.9250 ± 0.0007 | 0.584 ± 0.020 |
+| rf+lr+spline_lr | 0.9253 ± 0.0008 | 0.579 ± 0.014 |
+| rf+svc+linsvc+adaline (strict-list winner) | 0.9236 ± 0.0006 | 0.576 ± 0.015 |
+| rf+lr+svc_log (strict, clears the global AUC bar) | 0.9246 ± 0.0008 | 0.575 ± 0.018 |
+| *lgbm+lr+mlp_bag5+spline_lr (previous winner)* | *0.9260 ± 0.0007* | *0.571 ± 0.033* |
+
+Paired compares:
+- `rf+lr+spline_lr+linsvc` beats the previous winner on TPR (+0.013, 9/10)
+  and loses on AUC (-0.0010, 0/10).
+- `rf+lr+svc_log` beats it on TPR (+0.004, 6/10) and loses on AUC
+  (-0.0014, 0/10).
+
+The random forest with one random feature per split is the key ingredient,
+playing the role the MLP played before. Adding it to the full pool puts it
+in nearly every top combo. The very top full-pool combo is
+`rf+svc+adaline+lgbm` (0.9241 / 0.601), but that is the best of 561 and sits
+right on the AUC bar. The split-half checks again show the search itself
+doesn't generalize: about 0.53 held-out TPR for the selected combo. Read
+TPR 0.57–0.59 as one tie group.

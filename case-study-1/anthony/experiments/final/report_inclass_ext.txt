@@ -1,0 +1,84 @@
+pool: lr, spline_lr, svc, svc_log, linsvc, adaline, perceptron, knn, tree, rf, ada, et_nan
+
+== single models: raw pooled OOF (as harness.evaluate) vs percentile-mapped ==
+lr                                     AUC 0.9223±0.0008  TPR@1% 0.529±0.028  pAUC.05 0.8042
+  mapped                               AUC 0.9225±0.0007  TPR@1% 0.533±0.022  pAUC.05 0.8042
+spline_lr                              AUC 0.9249±0.0008  TPR@1% 0.495±0.010  pAUC.05 0.8025
+  mapped                               AUC 0.9251±0.0007  TPR@1% 0.498±0.007  pAUC.05 0.8026
+svc                                    AUC 0.9186±0.0007  TPR@1% 0.534±0.019  pAUC.05 0.8040
+  mapped                               AUC 0.9187±0.0006  TPR@1% 0.539±0.022  pAUC.05 0.8044
+svc_log                                AUC 0.9228±0.0009  TPR@1% 0.487±0.015  pAUC.05 0.8058
+  mapped                               AUC 0.9229±0.0009  TPR@1% 0.491±0.017  pAUC.05 0.8060
+linsvc                                 AUC 0.9217±0.0007  TPR@1% 0.519±0.023  pAUC.05 0.8050
+  mapped                               AUC 0.9218±0.0007  TPR@1% 0.522±0.020  pAUC.05 0.8051
+adaline                                AUC 0.9175±0.0007  TPR@1% 0.522±0.020  pAUC.05 0.8025
+  mapped                               AUC 0.9177±0.0006  TPR@1% 0.520±0.015  pAUC.05 0.8024
+perceptron                             AUC 0.9174±0.0017  TPR@1% 0.490±0.024  pAUC.05 0.7865
+  mapped                               AUC 0.9177±0.0019  TPR@1% 0.498±0.024  pAUC.05 0.7868
+knn                                    AUC 0.9044±0.0011  TPR@1% 0.493±0.009  pAUC.05 0.7926
+  mapped                               AUC 0.9053±0.0009  TPR@1% 0.494±0.008  pAUC.05 0.7926
+tree                                   AUC 0.8611±0.0065  TPR@1% 0.196±0.020  pAUC.05 0.6655
+  mapped                               AUC 0.8627±0.0063  TPR@1% 0.196±0.059  pAUC.05 0.6679
+rf                                     AUC 0.9167±0.0014  TPR@1% 0.541±0.030  pAUC.05 0.8016
+  mapped                               AUC 0.9169±0.0013  TPR@1% 0.538±0.029  pAUC.05 0.8015
+ada                                    AUC 0.9180±0.0018  TPR@1% 0.457±0.029  pAUC.05 0.7854
+  mapped                               AUC 0.9189±0.0016  TPR@1% 0.457±0.029  pAUC.05 0.7858
+et_nan                                 AUC 0.9076±0.0015  TPR@1% 0.534±0.013  pAUC.05 0.8005
+  mapped                               AUC 0.9078±0.0014  TPR@1% 0.533±0.011  pAUC.05 0.8006
+tabpfn (outer only)                    AUC 0.9263±0.0012  TPR@1% 0.576±0.014  pAUC.05 0.8139
+
+== 793 candidates; best AUC 0.9265; 245 within 0.003 -> ranked by TPR@1% ==
+lr+spline_lr+linsvc+rf                 AUC 0.9250±0.0007  TPR@1% 0.584±0.020  pAUC.05 0.8110
+spline_lr+svc_log+adaline+rf           AUC 0.9246±0.0007  TPR@1% 0.582±0.019  pAUC.05 0.8117
+spline_lr+linsvc+rf                    AUC 0.9249±0.0008  TPR@1% 0.581±0.015  pAUC.05 0.8104
+lr+spline_lr+rf                        AUC 0.9253±0.0008  TPR@1% 0.579±0.014  pAUC.05 0.8102
+spline_lr+svc_log+rf                   AUC 0.9257±0.0008  TPR@1% 0.576±0.020  pAUC.05 0.8108
+lr+spline_lr+svc_log+rf                AUC 0.9256±0.0007  TPR@1% 0.576±0.026  pAUC.05 0.8114
+svc+linsvc+adaline+rf                  AUC 0.9236±0.0006  TPR@1% 0.576±0.015  pAUC.05 0.8153
+lr+svc_log+rf                          AUC 0.9246±0.0008  TPR@1% 0.575±0.018  pAUC.05 0.8098
+svc_log+linsvc+rf                      AUC 0.9242±0.0008  TPR@1% 0.575±0.023  pAUC.05 0.8100
+spline_lr+svc_log+linsvc+rf            AUC 0.9254±0.0007  TPR@1% 0.574±0.025  pAUC.05 0.8115
+lr+spline_lr+adaline+rf                AUC 0.9242±0.0007  TPR@1% 0.573±0.012  pAUC.05 0.8107
+svc_log+rf                             AUC 0.9241±0.0009  TPR@1% 0.573±0.011  pAUC.05 0.8101
+spline_lr+linsvc+adaline+rf            AUC 0.9239±0.0007  TPR@1% 0.572±0.013  pAUC.05 0.8108
+lr+svc+adaline+rf                      AUC 0.9239±0.0006  TPR@1% 0.571±0.015  pAUC.05 0.8151
+spline_lr+linsvc+perceptron+rf         AUC 0.9254±0.0008  TPR@1% 0.571±0.018  pAUC.05 0.8099
+svc_log+adaline+rf+ada                 AUC 0.9244±0.0009  TPR@1% 0.571±0.018  pAUC.05 0.8078
+lr+spline_lr+perceptron+rf             AUC 0.9257±0.0008  TPR@1% 0.570±0.018  pAUC.05 0.8098
+lr+adaline+rf+ada                      AUC 0.9241±0.0009  TPR@1% 0.567±0.014  pAUC.05 0.8068
+spline_lr+perceptron+rf+et_nan         AUC 0.9236±0.0008  TPR@1% 0.567±0.019  pAUC.05 0.8115
+lr+svc_log+linsvc+rf                   AUC 0.9242±0.0008  TPR@1% 0.565±0.025  pAUC.05 0.8095
+linsvc+adaline+rf+ada                  AUC 0.9237±0.0009  TPR@1% 0.565±0.014  pAUC.05 0.8068
+spline_lr+adaline+rf+ada               AUC 0.9246±0.0009  TPR@1% 0.565±0.008  pAUC.05 0.8079
+lr+linsvc+rf                           AUC 0.9238±0.0008  TPR@1% 0.565±0.021  pAUC.05 0.8085
+lr+linsvc+rf+ada                       AUC 0.9247±0.0009  TPR@1% 0.565±0.015  pAUC.05 0.8068
+spline_lr+svc+adaline+rf               AUC 0.9246±0.0007  TPR@1% 0.564±0.022  pAUC.05 0.8145
+lr+rf+ada                              AUC 0.9247±0.0011  TPR@1% 0.563±0.012  pAUC.05 0.8059
+spline_lr+adaline+perceptron+rf        AUC 0.9248±0.0008  TPR@1% 0.563±0.024  pAUC.05 0.8098
+spline_lr+svc_log+perceptron+rf        AUC 0.9260±0.0008  TPR@1% 0.563±0.022  pAUC.05 0.8103
+linsvc+rf+ada                          AUC 0.9244±0.0011  TPR@1% 0.563±0.010  pAUC.05 0.8059
+svc+adaline+perceptron+rf              AUC 0.9245±0.0008  TPR@1% 0.562±0.016  pAUC.05 0.8139
+
+== paired compare (10 repeats): lr+spline_lr+linsvc+rf vs ==
+  lgbm+lr+mlp_bag5+spline_lr             tpr  diff +0.0129  wins 9/10  BEATS
+  lgbm+lr+mlp_bag5+spline_lr             auc  diff -0.0010  wins 0/10  -
+  et_nan+hgb+mlp+spline_lr               tpr  diff +0.0161  wins 9/10  BEATS
+  et_nan+hgb+mlp+spline_lr               auc  diff -0.0002  wins 4/10  -
+  mlp                                    tpr  diff +0.0176  wins 7/10  BEATS
+  mlp                                    auc  diff +0.0012  wins 10/10  BEATS
+  spline_lr+svc_log+adaline+rf           tpr  diff +0.0027  wins 7/10  BEATS
+  spline_lr+svc_log+adaline+rf           auc  diff +0.0004  wins 10/10  BEATS
+  spline_lr+linsvc+rf                    tpr  diff +0.0029  wins 6/10  BEATS
+  spline_lr+linsvc+rf                    auc  diff +0.0001  wins 7/10  BEATS
+  lr+spline_lr+rf                        tpr  diff +0.0050  wins 6/10  BEATS
+  lr+spline_lr+rf                        auc  diff -0.0003  wins 1/10  -
+  spline_lr+svc_log+rf                   tpr  diff +0.0079  wins 9/10  BEATS
+  spline_lr+svc_log+rf                   auc  diff -0.0007  wins 0/10  -
+  lr+spline_lr+svc_log+rf                tpr  diff +0.0082  wins 8/10  BEATS
+  lr+spline_lr+svc_log+rf                auc  diff -0.0006  wins 0/10  -
+
+== split-half selection check (select on half A, score on half B, 40 halves) ==
+  selected                                                   held-out AUC 0.9212  TPR@1% 0.530
+  lr+spline_lr+svc+svc_log+linsvc+adaline+perceptron+knn+tree+rf+ada+et_nan (all models, no selection) held-out AUC 0.9225  TPR@1% 0.547
+  lr+spline_lr+linsvc+rf (picked on ALL data: biased)        held-out AUC 0.9233  TPR@1% 0.562
+  most picked: svc+rf (2), svc+linsvc (2), spline_lr+svc+perceptron+tree (2), spline_lr+svc+adaline+rf (2), lr+rf (2), svc_log+rf (1)
