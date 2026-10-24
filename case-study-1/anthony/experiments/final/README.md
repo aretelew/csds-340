@@ -21,10 +21,10 @@ can actually deploy.
 - `report.py` produces `report.txt`: every single model, every equal-weight
   combo of 2 to 4 members (312 candidates), the selection rule, paired
   compares, and a split-half check of the selection itself.
-- `predict_test.py`: a self-contained `predictTest` (numpy + sklearn only).
-  `check_predict.py` confirms it reproduces the cached ensemble scores
-  (max abs diff 1e-16 on the folds checked) and that an email scored alone
-  gets the same score as in a batch.
+- The submission is `../../classifySpam.py`: a self-contained `predictTest`
+  (numpy + sklearn only) for the chosen ensemble. `check_predict.py` confirms
+  that it reproduces the cached ensemble scores of its `MEMBERS` exactly, and
+  that an email scored alone gets the same score as in a batch.
 
 Run from `case-study-1/anthony/`:
 
@@ -170,3 +170,28 @@ in nearly every top combo. The very top full-pool combo is
 right on the AUC bar. The split-half checks again show the search itself
 doesn't generalize: about 0.53 held-out TPR for the selected combo. Read
 TPR 0.57–0.59 as one tie group.
+
+## Pre-submission choice: rf + lr + svc_log
+
+We pre-submit `anthony/classifySpam.py`: an equal-weight percentile ensemble
+of logistic regression, an RBF SVM and a random forest. Every member is a
+method from the course list.
+
+| | AUC | TPR@1%FPR |
+|---|---|---|
+| 10 repeats (mean ± sd) | 0.9246 ± 0.0008 | 0.575 ± 0.018 |
+| per-repeat TPR | | 0.530, 0.578, 0.570, 0.594, 0.586, 0.573, 0.575, 0.573, 0.570, 0.602 |
+
+It beats the earlier `lgbm+lr+mlp_bag5+spline_lr` on TPR (+0.004, 6/10)
+but has lower AUC (-0.0014, 0/10).
+
+Checks on the submitted file:
+- `check_predict.py`: exactly reproduces the cached nested-CV scores (max abs
+  diff 0.0) on 3 folds. One email scored alone matches its batch score.
+- The unmodified `evaluateClassifier.py` (spamTrain2 replaced by a copy of
+  spamTrain1, so the accuracy it prints is in-sample and meaningless) runs
+  cleanly in 24 s on sklearn 1.9.1 and 17 s on sklearn 1.4.2, the minimum
+  needed for random forest with NaN. Scores differ slightly between the two
+  versions (RF/SVM internals changed), so our CV numbers are specific to 1.9.
+- `python classifySpam.py` runs 10-fold CV (seed 0) and prints AUC 0.9251 /
+  TPR 0.530, which is repeat 0 above.

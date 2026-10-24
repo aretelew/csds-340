@@ -1,13 +1,14 @@
-"""Check that predict_test.predictTest reproduces the cached nested-CV
-ensemble scores exactly, on a few outer folds of repeat 0.
+"""Check that the submission (anthony/classifySpam.py) reproduces the cached
+nested-CV ensemble scores of its MEMBERS exactly, on a few outer folds of
+repeat 0.
 
     uv run python -m experiments.final.check_predict
 """
 import numpy as np
 from sklearn.model_selection import StratifiedKFold
 
+import classifySpam as P
 from experiments.final import ensemble as E
-from experiments.final import predict_test as P
 from experiments.harness import load
 
 X, y = load()
