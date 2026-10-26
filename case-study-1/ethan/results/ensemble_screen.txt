@@ -1,0 +1,34 @@
+members (E_* = best-AUC bagged config per family):
+  E_lr           lr_C1 | subspace
+  E_mlp          mlp_h32_a10 | subspace
+  E_svc          svc_C100_g.01 | both
+  E_knn          knn_k15 | subspace
+  E_tree         tree_msl1 | subspace
+  E_perceptron   perceptron | half
+
+single members, percentile-mapped (mean ± sd over 10 repeats):
+  A_rf           AUC 0.9164±0.0014  TPR@1% 0.536±0.029
+  A_lr           AUC 0.9221±0.0007  TPR@1% 0.528±0.025
+  A_svc          AUC 0.9226±0.0009  TPR@1% 0.487±0.020
+  E_lr           AUC 0.9236±0.0006  TPR@1% 0.529±0.021
+  E_mlp          AUC 0.9217±0.0005  TPR@1% 0.519±0.010
+  E_svc          AUC 0.9209±0.0005  TPR@1% 0.522±0.020
+  E_knn          AUC 0.9184±0.0008  TPR@1% 0.478±0.008
+  E_tree         AUC 0.9137±0.0015  TPR@1% 0.500±0.024
+  E_perceptron   AUC 0.9178±0.0019  TPR@1% 0.460±0.042
+
+combos (equal-weight percentile average), paired vs the baseline:
+  1 anthony: rf+lr+svc             AUC 0.9241±0.0009  TPR@1% 0.572±0.022
+  2 anthony + bagged mlp           AUC 0.9241±0.0008  TPR@1% 0.572±0.015   dAUC -0.0000 (3/10)  dTPR -0.000 (5/10)  -
+  3 bagged mlp + rf + bagged lr    AUC 0.9238±0.0008  TPR@1% 0.535±0.018   dAUC -0.0003 (2/10)  dTPR -0.037 (0/10)  -
+  4 rf + bagged lr + bagged svc    AUC 0.9241±0.0008  TPR@1% 0.559±0.020   dAUC -0.0001 (5/10)  dTPR -0.013 (2/10)  -
+  5 bagged mlp+svc+tree+lr         AUC 0.9251±0.0006  TPR@1% 0.560±0.020   dAUC +0.0010 (10/10)  dTPR -0.012 (2/10)  -
+  6 best bagged of each family     AUC 0.9252±0.0006  TPR@1% 0.538±0.030   dAUC +0.0011 (10/10)  dTPR -0.034 (0/10)  -
+
+per-repeat TPR@1%:
+  1 anthony: rf+lr+svc             0.525 0.576 0.568 0.601 0.586 0.570 0.580 0.565 0.549 0.599
+  2 anthony + bagged mlp           0.536 0.570 0.580 0.576 0.580 0.581 0.568 0.581 0.556 0.589
+  3 bagged mlp + rf + bagged lr    0.514 0.551 0.557 0.539 0.552 0.517 0.509 0.520 0.531 0.559
+  4 rf + bagged lr + bagged svc    0.549 0.564 0.586 0.575 0.583 0.531 0.543 0.541 0.538 0.581
+  5 bagged mlp+svc+tree+lr         0.514 0.546 0.552 0.581 0.588 0.565 0.570 0.557 0.557 0.573
+  6 best bagged of each family     0.488 0.560 0.502 0.562 0.575 0.531 0.527 0.519 0.530 0.581

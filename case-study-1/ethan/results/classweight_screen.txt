@@ -1,0 +1,18 @@
+single members by non-spam weight w (percentile-mapped, mean over 10 repeats):
+  A_rf     w=1: 0.9164/0.536   w=2: 0.9157/0.530   w=4: 0.9137/0.530
+  A_lr     w=1: 0.9221/0.528   w=2: 0.9220/0.531   w=4: 0.9217/0.523
+  A_svc    w=1: 0.9226/0.487   w=2: 0.9225/0.485   w=4: 0.9185/0.486
+  E_lr     w=1: 0.9236/0.529   w=2: 0.9237/0.531   w=4: 0.9237/0.530
+  E_svc    w=1: 0.9209/0.522   w=2: 0.9181/0.504   w=4: 0.9139/0.504
+  E_tree   w=1: 0.9137/0.500   w=2: 0.9135/0.514   w=4: 0.9101/0.484
+
+combos, paired vs anthony w=1 (wins out of 10):
+  anthony: rf+lr+svc           w=1  AUC 0.9241±0.0009  TPR@1% 0.572±0.022
+  anthony: rf+lr+svc           w=2  AUC 0.9244±0.0007  TPR@1% 0.563±0.014   dAUC +0.0002 (7/10)  dTPR -0.009 (2/10)  -
+  anthony: rf+lr+svc           w=4  AUC 0.9228±0.0007  TPR@1% 0.553±0.020   dAUC -0.0013 (0/10)  dTPR -0.019 (2/10)  -
+  rf + bagged lr + bagged svc  w=1  AUC 0.9241±0.0008  TPR@1% 0.559±0.020   dAUC -0.0001 (5/10)  dTPR -0.013 (2/10)  -
+  rf + bagged lr + bagged svc  w=2  AUC 0.9241±0.0007  TPR@1% 0.549±0.011   dAUC +0.0000 (4/10)  dTPR -0.023 (1/10)  -
+  rf + bagged lr + bagged svc  w=4  AUC 0.9238±0.0009  TPR@1% 0.542±0.014   dAUC -0.0003 (2/10)  dTPR -0.030 (0/10)  -
+  bagged mlp+svc+tree+lr       w=1  AUC 0.9251±0.0006  TPR@1% 0.560±0.020   dAUC +0.0010 (10/10)  dTPR -0.012 (2/10)  -
+  bagged mlp+svc+tree+lr       w=2  AUC 0.9255±0.0007  TPR@1% 0.554±0.015   dAUC +0.0014 (10/10)  dTPR -0.018 (1/10)  -
+  bagged mlp+svc+tree+lr       w=4  AUC 0.9253±0.0010  TPR@1% 0.552±0.011   dAUC +0.0012 (10/10)  dTPR -0.019 (2/10)  -
