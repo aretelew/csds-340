@@ -1,19 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Spam classifier for CSDS 340 Case Study 1: an equal-weight ensemble of
-logistic regression, an RBF kernel SVM and a random forest.
+CSDS 340 Case Study 1 spam classifier.
 
-Each member is trained on the full training set. Its test scores are mapped
-to percentiles of its own 5-fold out-of-fold scores on the training set, and
-the three percentiles are averaged. Only training data is used to fit
-anything, and a test email's score does not depend on the other test emails.
+Ensemble of logistic regression, an RBF SVM and a random forest. Each model's
+test scores are converted to percentiles of its 5-fold CV scores on the
+training set, and the percentiles are averaged.
 
-Missing features (-1):
-- LR and SVM: log1p(1e4*x), with missing filled by the training mean of the
-  log, then standardized.
-- Random forest: missing becomes NaN and is handled natively.
-
-Requires numpy and scikit-learn >= 1.4 (random forest with NaN).
+Follows the same structure as Professor Xu's classifySpam.py file
 """
 
 import numpy as np
@@ -35,7 +28,7 @@ def _neg1_to_nan(Z):
 
 
 class LogMean(BaseEstimator, TransformerMixin):
-    """log1p(1e4*x); missing (-1) filled with the training mean of the log."""
+    # log1p(1e4*x), missing values filled with the column mean
 
     def fit(self, X, y=None):
         self.fill_ = np.nanmean(np.log1p(1e4 * _neg1_to_nan(X)), axis=0)
@@ -53,7 +46,6 @@ def _model(name):
     if name == "svc_log":
         return make_pipeline(LogMean(), StandardScaler(), SVC(C=30.0, gamma=0.001))
     if name == "rf":
-        # one random feature per split (max_features=1) beat sqrt and 2 in CV
         return make_pipeline(FunctionTransformer(_neg1_to_nan), RandomForestClassifier(
             n_estimators=1000, max_features=1, min_samples_leaf=1,
             random_state=0, n_jobs=-1))
@@ -67,9 +59,7 @@ def _score(model, X):
 
 
 def _pct_map(ref, s):
-    """Strictly increasing map of scores s to percentiles of the reference
-    scores ref: interpolated mid-rank percentiles, with rational tails past
-    both ends so test scores above the training max do not tie at 1."""
+    # map scores s to percentiles of ref, extrapolating past the ends
     s = np.asarray(s, dtype=float)
     r, counts = np.unique(ref, return_counts=True)
     q = (np.cumsum(counts) - counts / 2) / counts.sum()
@@ -103,7 +93,6 @@ if __name__ == "__main__":
     from sklearn.metrics import roc_auc_score, roc_curve
 
     def tprAtFPR(labels, outputs, desiredFPR=0.01):
-        """Same formula as evaluateClassifier.py."""
         fpr, tpr, thres = roc_curve(labels, outputs)
         maxFprIndex = np.where(fpr <= desiredFPR)[0][-1]
         return ((tpr[maxFprIndex + 1] - tpr[maxFprIndex])
@@ -114,7 +103,7 @@ if __name__ == "__main__":
     data = np.loadtxt(path if path.exists() else "spamTrain1.csv", delimiter=",")
     features, labels = data[:, :-1], data[:, -1]
 
-    # 10-fold CV with out-of-fold scores pooled over all 1500 emails
+    # 10-fold CV
     outputs = np.empty(len(labels))
     cv = StratifiedKFold(n_splits=10, shuffle=True, random_state=0)
     for tr, te in cv.split(features, labels):
