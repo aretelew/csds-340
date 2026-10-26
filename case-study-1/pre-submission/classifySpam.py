@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-CSDS 340 Case Study 1 spam classifier.
+Spam classifier for CSDS 340 Case Study 1: an equal-weight ensemble of
+logistic regression, an RBF kernel SVM and a random forest.
 
-Ensemble of logistic regression, an RBF SVM and a random forest. Each model's
-test scores are converted to z-scores using the mean and standard deviation of
-its 5-fold CV scores on the training set, and the z-scores are averaged.
+The models score on different scales, so each model's test scores are
+converted to z-scores using the mean and standard deviation of its 5-fold
+cross-validation scores on the training set. The final score is the average
+of the three z-scores.
 
-Follows the same structure as Professor Xu's classifySpam.py file
+Requires scikit-learn 1.4 or newer (random forest with missing values).
 """
 
 import numpy as np
@@ -33,7 +35,8 @@ def logTransform(features):
 
 
 class LogTransformAndFillMissing(BaseEstimator, TransformerMixin):
-    # log1p(10000*x), missing values filled with the column mean
+    """Log-transform the features and fill missing values with the training
+    mean of each (log-transformed) feature."""
 
     def fit(self, X, y=None):
         logFeatures = logTransform(X)
@@ -52,21 +55,22 @@ def makeModel(name):
         return make_pipeline(
             LogTransformAndFillMissing(),
             StandardScaler(),
-            LogisticRegression(C=0.1, max_iter=5000),
+            LogisticRegression(C=1.0, max_iter=5000),
         )
 
     if name == "svm":
         return make_pipeline(
             LogTransformAndFillMissing(),
             StandardScaler(),
-            SVC(C=30.0, gamma=0.001),
+            SVC(C=50.0, gamma=0.002),
         )
 
     if name == "random_forest":
+        # One random feature per split (max_features=1) beat sqrt and 2 in CV
         return make_pipeline(
             FunctionTransformer(replaceMissingWithNan),
             RandomForestClassifier(
-                n_estimators=1000,
+                n_estimators=3000,
                 max_features=1,
                 min_samples_leaf=1,
                 random_state=0,
@@ -123,6 +127,7 @@ if __name__ == "__main__":
     from sklearn.metrics import roc_auc_score, roc_curve
 
     def tprAtFPR(labels, outputs, desiredFPR=0.01):
+        """Same calculation as evaluateClassifier.py."""
         fpr, tpr, thres = roc_curve(labels, outputs)
         maxFprIndex = np.where(fpr <= desiredFPR)[0][-1]
         fprBelow = fpr[maxFprIndex]
@@ -140,7 +145,6 @@ if __name__ == "__main__":
     features = data[:, :-1]
     labels = data[:, -1]
 
-    # 10-fold CV
     outputs = np.empty(len(labels))
     folds = StratifiedKFold(n_splits=10, shuffle=True, random_state=0)
     for trainIndices, testIndices in folds.split(features, labels):
