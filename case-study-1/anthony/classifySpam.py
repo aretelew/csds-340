@@ -55,14 +55,14 @@ def makeModel(name):
         return make_pipeline(
             LogTransformAndFillMissing(),
             StandardScaler(),
-            LogisticRegression(C=0.1, max_iter=5000),
+            LogisticRegression(C=1.0, max_iter=5000),
         )
 
     if name == "svm":
         return make_pipeline(
             LogTransformAndFillMissing(),
             StandardScaler(),
-            SVC(C=30.0, gamma=0.001),
+            SVC(C=50.0, gamma=0.002),
         )
 
     if name == "random_forest":
@@ -70,7 +70,7 @@ def makeModel(name):
         return make_pipeline(
             FunctionTransformer(replaceMissingWithNan),
             RandomForestClassifier(
-                n_estimators=1000,
+                n_estimators=3000,
                 max_features=1,
                 min_samples_leaf=1,
                 random_state=0,
