@@ -3,8 +3,8 @@
 CSDS 340 Case Study 1 spam classifier.
 
 Ensemble of logistic regression, an RBF SVM and a random forest. Each model's
-test scores are converted to percentiles of its 5-fold CV scores on the
-training set, and the percentiles are averaged.
+test scores are converted to z-scores using the mean and standard deviation of
+its 5-fold CV scores on the training set, and the z-scores are averaged.
 
 Follows the same structure as Professor Xu's classifySpam.py file
 """
@@ -18,73 +18,103 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import FunctionTransformer, StandardScaler
 from sklearn.svm import SVC
 
-MEMBERS = ["lr", "svc_log", "rf"]
+MODEL_NAMES = ["logistic_regression", "svm", "random_forest"]
 
 
-def _neg1_to_nan(Z):
-    Z = np.array(Z, dtype=float, copy=True)
-    Z[Z == -1] = np.nan
-    return Z
+def replaceMissingWithNan(features):
+    features = np.array(features, dtype=float, copy=True)
+    features[features == -1] = np.nan
+    return features
 
 
-class LogMean(BaseEstimator, TransformerMixin):
-    # log1p(1e4*x), missing values filled with the column mean
+def logTransform(features):
+    features = replaceMissingWithNan(features)
+    return np.log1p(10000 * features)
+
+
+class LogTransformAndFillMissing(BaseEstimator, TransformerMixin):
+    # log1p(10000*x), missing values filled with the column mean
 
     def fit(self, X, y=None):
-        self.fill_ = np.nanmean(np.log1p(1e4 * _neg1_to_nan(X)), axis=0)
+        logFeatures = logTransform(X)
+        self.columnMeans_ = np.nanmean(logFeatures, axis=0)
         return self
 
     def transform(self, X):
-        F = np.log1p(1e4 * _neg1_to_nan(X))
-        return np.where(np.isnan(F), self.fill_, F)
+        logFeatures = logTransform(X)
+        isMissing = np.isnan(logFeatures)
+        filledFeatures = np.where(isMissing, self.columnMeans_, logFeatures)
+        return filledFeatures
 
 
-def _model(name):
-    if name == "lr":
-        return make_pipeline(LogMean(), StandardScaler(),
-                             LogisticRegression(C=0.1, max_iter=5000))
-    if name == "svc_log":
-        return make_pipeline(LogMean(), StandardScaler(), SVC(C=30.0, gamma=0.001))
-    if name == "rf":
-        return make_pipeline(FunctionTransformer(_neg1_to_nan), RandomForestClassifier(
-            n_estimators=1000, max_features=1, min_samples_leaf=1,
-            random_state=0, n_jobs=-1))
-    raise ValueError(name)
+def makeModel(name):
+    if name == "logistic_regression":
+        return make_pipeline(
+            LogTransformAndFillMissing(),
+            StandardScaler(),
+            LogisticRegression(C=0.1, max_iter=5000),
+        )
+
+    if name == "svm":
+        return make_pipeline(
+            LogTransformAndFillMissing(),
+            StandardScaler(),
+            SVC(C=30.0, gamma=0.001),
+        )
+
+    if name == "random_forest":
+        return make_pipeline(
+            FunctionTransformer(replaceMissingWithNan),
+            RandomForestClassifier(
+                n_estimators=1000,
+                max_features=1,
+                min_samples_leaf=1,
+                random_state=0,
+                n_jobs=-1,
+            ),
+        )
+
+    raise ValueError(f"Unknown model name: {name}")
 
 
-def _score(model, X):
-    if hasattr(model, "decision_function"):
-        return model.decision_function(X)
-    return model.predict_proba(X)[:, 1]
+def getSpamScores(name, model, features):
+    if name == "random_forest":
+        return model.predict_proba(features)[:, 1]
+    return model.decision_function(features)
 
 
-def _pct_map(ref, s):
-    # map scores s to percentiles of ref, extrapolating past the ends
-    s = np.asarray(s, dtype=float)
-    r, counts = np.unique(ref, return_counts=True)
-    q = (np.cumsum(counts) - counts / 2) / counts.sum()
-    out = np.interp(s, r, q)
-    k = max(1, len(r) // 10)
-    hi = (q[-1] - q[-1 - k]) / (r[-1] - r[-1 - k])
-    lo = (q[k] - q[0]) / (r[k] - r[0])
-    above, below = s > r[-1], s < r[0]
-    out[above] = 1 - (1 - q[-1]) / (1 + (s[above] - r[-1]) * hi / (1 - q[-1]))
-    out[below] = q[0] / (1 + (r[0] - s[below]) * lo / q[0])
-    return out
+def getCrossValidationScores(name, trainFeatures, trainLabels):
+    folds = StratifiedKFold(n_splits=5, shuffle=True, random_state=0)
+    cvScores = np.empty(len(trainLabels))
+
+    for fitIndices, heldOutIndices in folds.split(trainFeatures, trainLabels):
+        model = makeModel(name)
+        model.fit(trainFeatures[fitIndices], trainLabels[fitIndices])
+        heldOutScores = getSpamScores(name, model, trainFeatures[heldOutIndices])
+        cvScores[heldOutIndices] = heldOutScores
+
+    return cvScores
 
 
 def predictTest(trainFeatures, trainLabels, testFeatures):
-    X = np.asarray(trainFeatures, dtype=float)
-    y = np.asarray(trainLabels)
-    cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=0)
-    pcts = []
-    for name in MEMBERS:
-        ref = np.empty(len(y))
-        for tr, te in cv.split(X, y):
-            ref[te] = _score(_model(name).fit(X[tr], y[tr]), X[te])
-        s = _score(_model(name).fit(X, y), testFeatures)
-        pcts.append(_pct_map(ref, s))
-    return np.mean(pcts, axis=0)
+    trainFeatures = np.asarray(trainFeatures, dtype=float)
+    trainLabels = np.asarray(trainLabels)
+
+    zScoresForEachModel = []
+    for name in MODEL_NAMES:
+        cvScores = getCrossValidationScores(name, trainFeatures, trainLabels)
+        cvMean = cvScores.mean()
+        cvStd = cvScores.std()
+
+        model = makeModel(name)
+        model.fit(trainFeatures, trainLabels)
+        testScores = getSpamScores(name, model, testFeatures)
+
+        zScores = (testScores - cvMean) / cvStd
+        zScoresForEachModel.append(zScores)
+
+    finalScores = np.mean(zScoresForEachModel, axis=0)
+    return finalScores
 
 
 # Run this code only if being used as a script, not being imported
@@ -95,18 +125,28 @@ if __name__ == "__main__":
     def tprAtFPR(labels, outputs, desiredFPR=0.01):
         fpr, tpr, thres = roc_curve(labels, outputs)
         maxFprIndex = np.where(fpr <= desiredFPR)[0][-1]
-        return ((tpr[maxFprIndex + 1] - tpr[maxFprIndex])
-                / (fpr[maxFprIndex + 1] - fpr[maxFprIndex])
-                * (desiredFPR - fpr[maxFprIndex]) + tpr[maxFprIndex])
+        fprBelow = fpr[maxFprIndex]
+        fprAbove = fpr[maxFprIndex + 1]
+        tprBelow = tpr[maxFprIndex]
+        tprAbove = tpr[maxFprIndex + 1]
+        tprAt = ((tprAbove - tprBelow) / (fprAbove - fprBelow)
+                 * (desiredFPR - fprBelow) + tprBelow)
+        return tprAt
 
-    path = Path(__file__).resolve().parent.parent / "spamTrain1.csv"
-    data = np.loadtxt(path if path.exists() else "spamTrain1.csv", delimiter=",")
-    features, labels = data[:, :-1], data[:, -1]
+    dataPath = Path(__file__).resolve().parent.parent / "spamTrain1.csv"
+    if not dataPath.exists():
+        dataPath = Path("spamTrain1.csv")
+    data = np.loadtxt(dataPath, delimiter=",")
+    features = data[:, :-1]
+    labels = data[:, -1]
 
     # 10-fold CV
     outputs = np.empty(len(labels))
-    cv = StratifiedKFold(n_splits=10, shuffle=True, random_state=0)
-    for tr, te in cv.split(features, labels):
-        outputs[te] = predictTest(features[tr], labels[tr], features[te])
+    folds = StratifiedKFold(n_splits=10, shuffle=True, random_state=0)
+    for trainIndices, testIndices in folds.split(features, labels):
+        outputs[testIndices] = predictTest(features[trainIndices],
+                                           labels[trainIndices],
+                                           features[testIndices])
+
     print(f"10-fold CV AUC: {roc_auc_score(labels, outputs):.4f}")
     print(f"10-fold CV TPR at FPR = 0.01: {tprAtFPR(labels, outputs):.4f}")
