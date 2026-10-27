@@ -1,16 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Spam classifier for CSDS 340 Case Study 1: an equal-weight ensemble of
-logistic regression, an RBF kernel SVM and a random forest.
-
-The models score on different scales, so each model's test scores are
-converted to z-scores using the mean and standard deviation of its 5-fold
-cross-validation scores on the training set. The final score is the average
-of the three z-scores.
-
-Requires scikit-learn 1.4 or newer (random forest with missing values).
-"""
-
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.ensemble import RandomForestClassifier
@@ -35,8 +22,6 @@ def logTransform(features):
 
 
 class LogTransformAndFillMissing(BaseEstimator, TransformerMixin):
-    """Log-transform the features and fill missing values with the training
-    mean of each (log-transformed) feature."""
 
     def fit(self, X, y=None):
         logFeatures = logTransform(X)
@@ -66,7 +51,6 @@ def makeModel(name):
         )
 
     if name == "random_forest":
-        # One random feature per split (max_features=1) beat sqrt and 2 in CV
         return make_pipeline(
             FunctionTransformer(replaceMissingWithNan),
             RandomForestClassifier(
@@ -121,13 +105,11 @@ def predictTest(trainFeatures, trainLabels, testFeatures):
     return finalScores
 
 
-# Run this code only if being used as a script, not being imported
 if __name__ == "__main__":
     from pathlib import Path
     from sklearn.metrics import roc_auc_score, roc_curve
 
     def tprAtFPR(labels, outputs, desiredFPR=0.01):
-        """Same calculation as evaluateClassifier.py."""
         fpr, tpr, thres = roc_curve(labels, outputs)
         maxFprIndex = np.where(fpr <= desiredFPR)[0][-1]
         fprBelow = fpr[maxFprIndex]
